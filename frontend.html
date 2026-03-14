@@ -1,40 +1,59 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
 <title>Workflow Engine</title>
 
 <style>
 
 body{
-font-family: Arial;
-background: linear-gradient(135deg,#1e3c72,#2a5298);
-color:white;
-text-align:center;
-margin-top:120px;
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:white;
+    text-align:center;
 }
 
 .container{
-background:rgba(255,255,255,0.1);
-padding:40px;
-border-radius:10px;
-display:inline-block;
+    margin-top:140px;
+    background:rgba(0,0,0,0.35);
+    padding:50px;
+    width:500px;
+    margin-left:auto;
+    margin-right:auto;
+    border-radius:12px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.6);
+}
+
+h1{
+    font-size:36px;
+    letter-spacing:1px;
+}
+
+p{
+    color:#cbd5e1;
+    font-size:16px;
 }
 
 button{
-padding:15px 30px;
-font-size:18px;
-border:none;
-background:#00c9a7;
-color:white;
-border-radius:6px;
-cursor:pointer;
-margin-top:20px;
+    padding:15px 35px;
+    font-size:18px;
+    border:none;
+    background:#00d4ff;
+    color:black;
+    border-radius:8px;
+    cursor:pointer;
+    margin-top:25px;
+    font-weight:bold;
 }
 
 button:hover{
-background:#00a58b;
+    background:#00a8cc;
+}
+
+.footer{
+    margin-top:60px;
+    font-size:13px;
+    color:#94a3b8;
 }
 
 </style>
@@ -45,27 +64,27 @@ background:#00a58b;
 
 <div class="container">
 
-<h1>Workflow Automation Engine</h1>
+<h1>⚙ Workflow Automation Engine</h1>
+
+<p>Engineering Workflow System</p>
 
 <p>Halleyx Hackathon Project</p>
 
-<button onclick="openDocs()">
-Open Workflow API Docs
-</button>
+<button onclick="openDocs()">Open Workflow API Docs</button>
 
+<div class="footer">
+Built with Python + FastAPI
 </div>
 
+</div>
 
 <script>
 
 function openDocs(){
-
-window.location.href="/docs"
-
+    window.location.href="/docs"
 }
 
 </script>
 
 </body>
-
 </html>
