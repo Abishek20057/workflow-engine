@@ -1,35 +1,106 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Workflow Automation Engine</title>
+<title>Workflow Engine Dashboard</title>
+
 <style>
+
 body{
 font-family: Arial;
+margin:0;
+background:#f4f6f9;
+}
+
+header{
+background:#2c3e50;
+color:white;
+padding:20px;
 text-align:center;
-margin-top:100px;
-background:#f4f4f4;
+}
+
+.container{
+padding:30px;
 }
 
 button{
 padding:10px 20px;
-font-size:16px;
-cursor:pointer;
-background:#007bff;
-color:white;
+background:#3498db;
 border:none;
+color:white;
 border-radius:5px;
+cursor:pointer;
 }
+
+button:hover{
+background:#2980b9;
+}
+
+.card{
+background:white;
+padding:20px;
+margin-top:20px;
+border-radius:8px;
+box-shadow:0px 2px 10px rgba(0,0,0,0.1);
+}
+
+.workflow{
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<h1>Workflow Automation Engine</h1>
+<header>
+<h1>Workflow Automation Dashboard</h1>
 <p>Halleyx Hackathon Project</p>
+</header>
+
+<div class="container">
 
 <button onclick="createWorkflow()">Create Sample Workflow</button>
 
+<div class="card">
+
+<h3>Existing Workflows</h3>
+
+<div id="workflowList">
+Loading workflows...
+</div>
+
+</div>
+
+</div>
+
+
 <script>
+
+async function loadWorkflows(){
+
+const response = await fetch("/workflows")
+const data = await response.json()
+
+let html = ""
+
+data.forEach(w => {
+
+html += `
+<div class="workflow">
+<b>${w.name}</b><br>
+ID: ${w.id}
+</div>
+`
+
+})
+
+document.getElementById("workflowList").innerHTML = html
+
+}
+
 async function createWorkflow(){
 
 const response = await fetch("/workflows",{
@@ -51,9 +122,15 @@ start_step_id:null
 })
 
 const data = await response.json()
-alert("Workflow Created: " + data.workflow.id)
+
+alert("Workflow Created!")
+
+loadWorkflows()
 
 }
+
+loadWorkflows()
+
 </script>
 
 </body>
