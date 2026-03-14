@@ -6,6 +6,8 @@
 
 <style>
 
+/* ----------------- BODY ----------------- */
+
 body{
     margin:0;
     font-family:Segoe UI;
@@ -13,60 +15,106 @@ body{
     color:white;
 }
 
+/* Engineering grid background */
+
+body::before{
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size:40px 40px;
+    pointer-events:none;
+}
+
+/* ---------------- HEADER ---------------- */
+
 .header{
     text-align:center;
-    padding:25px;
-    font-size:28px;
+    padding:30px;
+    font-size:32px;
     font-weight:bold;
 }
+
+/* ---------------- CONTAINER ---------------- */
 
 .container{
     text-align:center;
     margin-top:40px;
 }
 
+/* ---------------- WORKFLOW ---------------- */
+
 .workflow{
     display:flex;
     justify-content:center;
     align-items:center;
-    margin-top:40px;
-}
-
-.step{
-    background:#00d4ff;
-    color:black;
-    padding:15px 25px;
-    border-radius:8px;
-    margin:10px;
-    font-weight:bold;
-}
-
-.arrow{
-    font-size:24px;
-    margin:0 10px;
-}
-
-.dashboard{
     margin-top:50px;
 }
 
+/* Workflow blocks */
+
+.step{
+    background:linear-gradient(145deg,#00d4ff,#00a8cc);
+    color:black;
+    padding:18px 35px;
+    border-radius:10px;
+    margin:10px;
+    font-weight:bold;
+    box-shadow:0 5px 20px rgba(0,0,0,0.5);
+    transition:0.3s;
+}
+
+.step:hover{
+    transform:scale(1.08);
+}
+
+/* Animated arrows */
+
+.arrow{
+    font-size:28px;
+    margin:0 10px;
+    animation:move 1.5s infinite;
+}
+
+@keyframes move{
+    0%{opacity:0.2;}
+    50%{opacity:1;}
+    100%{opacity:0.2;}
+}
+
+/* ---------------- DASHBOARD ---------------- */
+
+.dashboard{
+    margin-top:60px;
+}
+
+/* Buttons */
+
 button{
-    padding:12px 25px;
-    margin:8px;
+    padding:14px 30px;
+    margin:10px;
     border:none;
-    border-radius:6px;
+    border-radius:8px;
     font-size:16px;
-    background:#22c55e;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
     color:white;
     cursor:pointer;
+    font-weight:bold;
+    box-shadow:0 4px 15px rgba(0,0,0,0.4);
+    transition:0.3s;
 }
 
 button:hover{
-    background:#16a34a;
+    transform:translateY(-3px);
 }
 
+/* Footer */
+
 .footer{
-    margin-top:60px;
+    margin-top:80px;
     text-align:center;
     font-size:14px;
     color:#94a3b8;
@@ -90,15 +138,15 @@ button:hover{
 
 <div class="step">Start</div>
 
-<div class="arrow">➡</div>
+<div class="arrow">➜</div>
 
 <div class="step">Manager Approval</div>
 
-<div class="arrow">➡</div>
+<div class="arrow">➜</div>
 
 <div class="step">Finance Approval</div>
 
-<div class="arrow">➡</div>
+<div class="arrow">➜</div>
 
 <div class="step">Completed</div>
 
