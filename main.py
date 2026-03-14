@@ -1,11 +1,14 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
-from typing import Dict, Optional
-from uuid import uuid4
+import uuid
 
 app = FastAPI()
 
+# -----------------------------
 # In-memory storage
+# -----------------------------
+
 workflows = {}
 steps = {}
 rules = {}
@@ -18,30 +21,31 @@ class Workflow(BaseModel):
     name: str
     version: int
     is_active: bool
-    input_schema: Dict
-    start_step_id: Optional[str] = None
+    input_schema: dict
+    start_step_id: str | None = None
 
 
 class Step(BaseModel):
     name: str
     step_type: str
     order: int
-    metadata: Optional[Dict] = None
+    metadata: dict | None = None
 
 
 class Rule(BaseModel):
     condition: str
-    next_step_id: Optional[str]
+    next_step_id: str | None
     priority: int
 
 
 # -----------------------------
-# Home
+# Homepage UI
 # -----------------------------
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def home():
-    return {"message": "Halleyx Workflow Engine Running"}
+    with open("frontend.html") as f:
+        return f.read()
 
 
 # -----------------------------
@@ -51,7 +55,7 @@ def home():
 @app.post("/workflows")
 def create_workflow(workflow: Workflow):
 
-    workflow_id = str(uuid4())
+    workflow_id = str(uuid.uuid4())
 
     workflows[workflow_id] = {
         "id": workflow_id,
@@ -62,10 +66,7 @@ def create_workflow(workflow: Workflow):
         "start_step_id": workflow.start_step_id
     }
 
-    return {
-        "message": "Workflow created",
-        "workflow": workflows[workflow_id]
-    }
+    return {"message": "Workflow created", "workflow": workflows[workflow_id]}
 
 
 @app.get("/workflows")
@@ -83,9 +84,9 @@ def add_step(workflow_id: str, step: Step):
     if workflow_id not in workflows:
         raise HTTPException(status_code=404, detail="Workflow not found")
 
-    step_id = str(uuid4())
+    step_id = str(uuid.uuid4())
 
-    step_data = {
+    steps[step_id] = {
         "id": step_id,
         "workflow_id": workflow_id,
         "name": step.name,
@@ -94,24 +95,19 @@ def add_step(workflow_id: str, step: Step):
         "metadata": step.metadata
     }
 
-    if workflow_id not in steps:
-        steps[workflow_id] = []
-
-    steps[workflow_id].append(step_data)
-
-    return {
-        "message": "Step added",
-        "step": step_data
-    }
+    return {"message": "Step added", "step": steps[step_id]}
 
 
 @app.get("/workflows/{workflow_id}/steps")
 def list_steps(workflow_id: str):
 
-    if workflow_id not in workflows:
-        raise HTTPException(status_code=404, detail="Workflow not found")
+    result = []
 
-    return steps.get(workflow_id, [])
+    for step in steps.values():
+        if step["workflow_id"] == workflow_id:
+            result.append(step)
+
+    return result
 
 
 # -----------------------------
@@ -121,9 +117,12 @@ def list_steps(workflow_id: str):
 @app.post("/steps/{step_id}/rules")
 def add_rule(step_id: str, rule: Rule):
 
-    rule_id = str(uuid4())
+    if step_id not in steps:
+        raise HTTPException(status_code=404, detail="Step not found")
 
-    rule_data = {
+    rule_id = str(uuid.uuid4())
+
+    rules[rule_id] = {
         "id": rule_id,
         "step_id": step_id,
         "condition": rule.condition,
@@ -131,20 +130,19 @@ def add_rule(step_id: str, rule: Rule):
         "priority": rule.priority
     }
 
-    if step_id not in rules:
-        rules[step_id] = []
-
-    rules[step_id].append(rule_data)
-
-    return {
-        "message": "Rule added",
-        "rule": rule_data
-    }
+    return {"message": "Rule added", "rule": rules[rule_id]}
 
 
 @app.get("/steps/{step_id}/rules")
 def list_rules(step_id: str):
-    return rules.get(step_id, [])
+
+    result = []
+
+    for rule in rules.values():
+        if rule["step_id"] == step_id:
+            result.append(rule)
+
+    return result
 
 
 # -----------------------------
@@ -152,51 +150,42 @@ def list_rules(step_id: str):
 # -----------------------------
 
 @app.post("/execute/{workflow_id}")
-def execute_workflow(workflow_id: str, data: Dict):
+def execute_workflow(workflow_id: str):
 
     if workflow_id not in workflows:
         raise HTTPException(status_code=404, detail="Workflow not found")
 
-    workflow_steps = steps.get(workflow_id, [])
+    workflow = workflows[workflow_id]
 
-    if not workflow_steps:
-        return {"message": "No steps found in workflow"}
-
-    workflow_steps = sorted(workflow_steps, key=lambda x: x["order"])
+    current_step_id = workflow["start_step_id"]
 
     execution_log = []
 
-    for step in workflow_steps:
+    while current_step_id:
 
-        step_id = step["id"]
-        step_name = step["name"]
+        step = steps.get(current_step_id)
 
-        step_rules = rules.get(step_id, [])
+        if not step:
+            break
 
-        for rule in sorted(step_rules, key=lambda x: x["priority"]):
+        execution_log.append(f"Executing step: {step['name']}")
 
-            condition = rule["condition"]
+        step_rules = [
+            r for r in rules.values() if r["step_id"] == current_step_id
+        ]
 
-            try:
-                result = eval(condition, {}, data)
-            except:
-                result = False
+        step_rules.sort(key=lambda x: x["priority"])
 
-            execution_log.append({
-                "step": step_name,
-                "rule_checked": condition,
-                "result": result
-            })
+        next_step = None
 
-            if result:
-                return {
-                    "execution_log": execution_log,
-                    "current_step": step_name,
-                    "matched_rule": rule["condition"],
-                    "next_step_id": rule["next_step_id"]
-                }
+        for rule in step_rules:
+            if rule["condition"] == "DEFAULT":
+                next_step = rule["next_step_id"]
+                break
+
+        current_step_id = next_step
 
     return {
-        "execution_log": execution_log,
-        "message": "No rule matched"
+        "message": "Workflow executed",
+        "log": execution_log
     }
