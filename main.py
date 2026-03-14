@@ -5,17 +5,17 @@ import uuid
 
 app = FastAPI()
 
-# -----------------------------
+# -------------------------------
 # In-memory storage
-# -----------------------------
+# -------------------------------
 
 workflows = {}
 steps = {}
 rules = {}
 
-# -----------------------------
+# -------------------------------
 # Models
-# -----------------------------
+# -------------------------------
 
 class Workflow(BaseModel):
     name: str
@@ -38,9 +38,14 @@ class Rule(BaseModel):
     priority: int
 
 
-# -----------------------------
-# Homepage UI
-# -----------------------------
+class Expense(BaseModel):
+    name: str
+    amount: int
+
+
+# -------------------------------
+# Homepage
+# -------------------------------
 
 @app.get("/", response_class=HTMLResponse)
 def home():
@@ -48,9 +53,9 @@ def home():
         return f.read()
 
 
-# -----------------------------
+# -------------------------------
 # Workflow APIs
-# -----------------------------
+# -------------------------------
 
 @app.post("/workflows")
 def create_workflow(workflow: Workflow):
@@ -74,9 +79,9 @@ def list_workflows():
     return list(workflows.values())
 
 
-# -----------------------------
-# Step APIs
-# -----------------------------
+# -------------------------------
+# Steps APIs
+# -------------------------------
 
 @app.post("/workflows/{workflow_id}/steps")
 def add_step(workflow_id: str, step: Step):
@@ -110,9 +115,9 @@ def list_steps(workflow_id: str):
     return result
 
 
-# -----------------------------
-# Rule APIs
-# -----------------------------
+# -------------------------------
+# Rules APIs
+# -------------------------------
 
 @app.post("/steps/{step_id}/rules")
 def add_rule(step_id: str, rule: Rule):
@@ -145,9 +150,9 @@ def list_rules(step_id: str):
     return result
 
 
-# -----------------------------
+# -------------------------------
 # Workflow Execution
-# -----------------------------
+# -------------------------------
 
 @app.post("/execute/{workflow_id}")
 def execute_workflow(workflow_id: str):
@@ -187,4 +192,29 @@ def execute_workflow(workflow_id: str):
     return {
         "message": "Workflow executed",
         "log": execution_log
+    }
+
+
+# -------------------------------
+# Expense Workflow (User Friendly)
+# -------------------------------
+
+@app.post("/submit-expense")
+def submit_expense(expense: Expense):
+
+    amount = expense.amount
+
+    if amount < 1000:
+        status = "Auto Approved"
+
+    elif amount < 10000:
+        status = "Manager Approval Required"
+
+    else:
+        status = "Finance Approval Required"
+
+    return {
+        "message": f"Request submitted by {expense.name}",
+        "amount": amount,
+        "status": status
     }

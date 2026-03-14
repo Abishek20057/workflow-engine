@@ -2,81 +2,45 @@
 <html>
 
 <head>
+
 <title>Workflow Automation Engine</title>
 
 <style>
 
-/* ---------------- BODY ---------------- */
-
 body{
 margin:0;
-font-family:Segoe UI;
+font-family:Arial;
+color:white;
 background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-color:white;
+background-size:cover;
+text-align:center;
 }
-
-/* Engineering grid */
-
-body::before{
-content:"";
-position:fixed;
-width:100%;
-height:100%;
-background-image:
-linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-background-size:40px 40px;
-pointer-events:none;
-}
-
-/* ---------------- NAVBAR ---------------- */
-
-.navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px 40px;
-background:rgba(0,0,0,0.3);
-backdrop-filter:blur(10px);
-}
-
-.logo{
-font-size:20px;
-font-weight:bold;
-}
-
-.nav-links a{
-margin-left:20px;
-text-decoration:none;
-color:white;
-font-weight:500;
-}
-
-.nav-links a:hover{
-color:#22c55e;
-}
-
-/* ---------------- HEADER ---------------- */
 
 .header{
-text-align:center;
-padding:30px;
-font-size:36px;
-font-weight:bold;
+display:flex;
+justify-content:space-between;
+padding:20px 40px;
+background:rgba(0,0,0,0.3);
 }
 
-.subtitle{
-text-align:center;
-color:#cbd5e1;
-margin-top:-10px;
+.header h2{
+margin:0;
 }
 
-/* engine status */
+.nav a{
+color:white;
+margin-left:20px;
+text-decoration:none;
+}
 
-.engine-status{
-text-align:center;
+.main{
+padding:60px;
+}
+
+.status{
 margin-top:10px;
-color:#94a3b8;
+font-size:14px;
+color:#9be7a0;
 }
 
 .status-dot{
@@ -87,99 +51,96 @@ border-radius:50%;
 display:inline-block;
 margin-right:6px;
 box-shadow:0 0 10px #22c55e;
+animation:pulse 1.5s infinite;
 }
 
-/* ---------------- WORKFLOW ---------------- */
-
-.container{
-text-align:center;
-margin-top:40px;
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.4);}
+100%{transform:scale(1);}
 }
 
 .workflow{
+margin-top:40px;
 display:flex;
 justify-content:center;
 align-items:center;
-margin-top:50px;
+gap:20px;
 }
 
 .step{
-background:linear-gradient(145deg,#00d4ff,#00a8cc);
+background:#00bcd4;
+padding:15px 25px;
+border-radius:8px;
 color:black;
-padding:18px 35px;
-border-radius:10px;
-margin:10px;
 font-weight:bold;
-box-shadow:0 5px 20px rgba(0,0,0,0.5);
-transition:0.4s;
+transition:0.3s;
 }
 
 .step:hover{
 transform:scale(1.1);
-}
-
-/* active workflow animation */
-
-.active{
-background:#22c55e !important;
-color:white;
-box-shadow:0 0 20px #22c55e;
+box-shadow:0 0 20px #00d4ff;
 }
 
 .arrow{
-font-size:28px;
-margin:0 10px;
-color:#94a3b8;
+font-size:25px;
 }
-
-/* ---------------- STATS ---------------- */
 
 .stats{
 display:flex;
 justify-content:center;
-margin-top:50px;
 gap:30px;
+margin-top:50px;
 }
 
-.stat-box{
-background:rgba(255,255,255,0.08);
-padding:25px;
+.card{
+background:rgba(255,255,255,0.1);
+padding:30px;
 border-radius:10px;
-width:150px;
-text-align:center;
+width:160px;
 }
 
-/* ---------------- BUTTONS ---------------- */
+.card h1{
+margin:0;
+}
 
-.dashboard{
+.panel{
 margin-top:60px;
 }
 
 button{
-padding:14px 30px;
+padding:14px 26px;
 margin:10px;
 border:none;
-border-radius:8px;
+border-radius:6px;
 font-size:16px;
-background:linear-gradient(135deg,#22c55e,#16a34a);
-color:white;
 cursor:pointer;
-font-weight:bold;
-box-shadow:0 4px 15px rgba(0,0,0,0.4);
+background:#22c55e;
+color:white;
 transition:0.3s;
 }
 
 button:hover{
-transform:translateY(-3px);
+background:#16a34a;
 }
 
-/* ---------------- FOOTER ---------------- */
+.form-box{
+margin-top:40px;
+}
+
+.form-box input{
+display:block;
+margin:10px auto;
+padding:10px;
+width:250px;
+border-radius:5px;
+border:none;
+}
 
 .footer{
-margin-top:80px;
-text-align:center;
+margin-top:60px;
 font-size:14px;
-color:#94a3b8;
+opacity:0.7;
 }
 
 </style>
@@ -188,13 +149,11 @@ color:#94a3b8;
 
 <body>
 
-<!-- NAVBAR -->
+<div class="header">
 
-<div class="navbar">
+<h2>⚙ Workflow Engine</h2>
 
-<div class="logo">⚙ Workflow Engine</div>
-
-<div class="nav-links">
+<div class="nav">
 <a href="/">Home</a>
 <a href="/docs">API Docs</a>
 <a href="/workflows">Workflows</a>
@@ -202,134 +161,124 @@ color:#94a3b8;
 
 </div>
 
-<!-- HEADER -->
 
-<div class="header">
-Workflow Automation Engine
+<div class="main">
+
+<h1>Workflow Automation Engine</h1>
+
+<p>Engineering Automation Platform</p>
+
+<div class="status">
+<span class="status-dot"></span>Engine Running
 </div>
 
-<div class="subtitle">
-Engineering Automation Platform
-</div>
 
-<div class="engine-status">
-<span class="status-dot"></span> Engine Running
-</div>
-
-<!-- WORKFLOW -->
-
-<div class="container">
-
-<h2>Visual Workflow Example</h2>
+<h2 style="margin-top:50px;">Visual Workflow Example</h2>
 
 <div class="workflow">
 
-<div id="step1" class="step">Start</div>
+<div class="step">Start</div>
 
-<div class="arrow">➜</div>
+<div class="arrow">→</div>
 
-<div id="step2" class="step">Manager Approval</div>
+<div class="step">Manager Approval</div>
 
-<div class="arrow">➜</div>
+<div class="arrow">→</div>
 
-<div id="step3" class="step">Finance Approval</div>
+<div class="step">Finance Approval</div>
 
-<div class="arrow">➜</div>
+<div class="arrow">→</div>
 
-<div id="step4" class="step">Completed</div>
+<div class="step">Completed</div>
 
 </div>
 
-<!-- STATS -->
 
 <div class="stats">
 
-<div class="stat-box">
-<h2>4</h2>
+<div class="card">
+<h1>4</h1>
 <p>Workflow Steps</p>
 </div>
 
-<div class="stat-box">
-<h2>1</h2>
+<div class="card">
+<h1>1</h1>
 <p>Active Workflow</p>
 </div>
 
-<div class="stat-box">
-<h2>100%</h2>
+<div class="card">
+<h1>100%</h1>
 <p>System Health</p>
 </div>
 
 </div>
 
-<!-- CONTROL PANEL -->
 
-<div class="dashboard">
+<div class="panel">
 
-<h3>Control Panel</h3>
+<h2>Control Panel</h2>
 
-<button onclick="runWorkflow()">Run Demo Workflow</button>
+<button onclick="runDemo()">Run Demo Workflow</button>
 
-<button onclick="createWorkflow()">Create Workflow</button>
+<button onclick="location.href='/docs'">API Docs</button>
 
-<button onclick="viewWorkflows()">View Workflows</button>
-
-<button onclick="openDocs()">API Docs</button>
+<button onclick="location.href='/workflows'">View Workflows</button>
 
 </div>
 
-</div>
 
-<!-- FOOTER -->
+<h2 style="margin-top:60px;">Submit Expense Request</h2>
+
+<div class="form-box">
+
+<input id="name" placeholder="Employee Name">
+
+<input id="amount" placeholder="Amount">
+
+<button onclick="submitExpense()">Submit Request</button>
+
+</div>
 
 <div class="footer">
-Halleyx Hackathon Project | FastAPI Workflow Engine
+
+© 2026 Halleyx Hackathon Project  
+FastAPI Workflow Engine
+
 </div>
+
+</div>
+
 
 <script>
 
-/* workflow animation */
+function runDemo(){
+alert("Demo Workflow Started\nStart → Manager → Finance → Completed")
+}
 
-function runWorkflow(){
+async function submitExpense(){
 
-let steps=["step1","step2","step3","step4"]
+const name=document.getElementById("name").value
+const amount=document.getElementById("amount").value
 
-steps.forEach(id=>{
-document.getElementById(id).classList.remove("active")
+const res=await fetch("/submit-expense",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name:name,
+amount:Number(amount)
+})
 })
 
-let i=0
+const data=await res.json()
 
-function activate(){
+alert("Status: "+data.status)
 
-if(i<steps.length){
-
-document.getElementById(steps[i]).classList.add("active")
-
-i++
-
-setTimeout(activate,1000)
-
-}
-
-}
-
-activate()
-
-}
-
-function createWorkflow(){
-window.location.href="/docs#/default/create_workflow_workflows_post"
-}
-
-function viewWorkflows(){
-window.location.href="/workflows"
-}
-
-function openDocs(){
-window.location.href="/docs"
 }
 
 </script>
 
 </body>
+
 </html>
