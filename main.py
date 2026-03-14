@@ -156,7 +156,6 @@ def execute_workflow(workflow_id: str):
         raise HTTPException(status_code=404, detail="Workflow not found")
 
     workflow = workflows[workflow_id]
-
     current_step_id = workflow["start_step_id"]
 
     execution_log = []
