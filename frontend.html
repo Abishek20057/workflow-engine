@@ -6,118 +6,108 @@
 
 <style>
 
-/* ----------------- BODY ----------------- */
-
 body{
-    margin:0;
-    font-family:Segoe UI;
-    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    color:white;
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
 }
 
-/* Engineering grid background */
+/* engineering grid */
 
 body::before{
-    content:"";
-    position:fixed;
-    width:100%;
-    height:100%;
-    background-image:
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-    background-size:40px 40px;
-    pointer-events:none;
+content:"";
+position:fixed;
+width:100%;
+height:100%;
+background-image:
+linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+background-size:40px 40px;
+pointer-events:none;
 }
-
-/* ---------------- HEADER ---------------- */
 
 .header{
-    text-align:center;
-    padding:30px;
-    font-size:32px;
-    font-weight:bold;
+text-align:center;
+padding:30px;
+font-size:34px;
+font-weight:bold;
 }
 
-/* ---------------- CONTAINER ---------------- */
+.subtitle{
+text-align:center;
+color:#cbd5e1;
+}
 
 .container{
-    text-align:center;
-    margin-top:40px;
+text-align:center;
+margin-top:40px;
 }
 
-/* ---------------- WORKFLOW ---------------- */
+/* workflow */
 
 .workflow{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin-top:50px;
+display:flex;
+justify-content:center;
+align-items:center;
+margin-top:50px;
 }
-
-/* Workflow blocks */
 
 .step{
-    background:linear-gradient(145deg,#00d4ff,#00a8cc);
-    color:black;
-    padding:18px 35px;
-    border-radius:10px;
-    margin:10px;
-    font-weight:bold;
-    box-shadow:0 5px 20px rgba(0,0,0,0.5);
-    transition:0.3s;
+background:#00a8cc;
+color:black;
+padding:18px 35px;
+border-radius:10px;
+margin:10px;
+font-weight:bold;
+box-shadow:0 5px 20px rgba(0,0,0,0.5);
+transition:0.4s;
 }
 
-.step:hover{
-    transform:scale(1.08);
-}
+/* active step animation */
 
-/* Animated arrows */
+.active{
+background:#22c55e !important;
+color:white;
+transform:scale(1.1);
+box-shadow:0 0 20px #22c55e;
+}
 
 .arrow{
-    font-size:28px;
-    margin:0 10px;
-    animation:move 1.5s infinite;
+font-size:28px;
+margin:0 10px;
+color:#94a3b8;
 }
 
-@keyframes move{
-    0%{opacity:0.2;}
-    50%{opacity:1;}
-    100%{opacity:0.2;}
-}
-
-/* ---------------- DASHBOARD ---------------- */
+/* buttons */
 
 .dashboard{
-    margin-top:60px;
+margin-top:60px;
 }
 
-/* Buttons */
-
 button{
-    padding:14px 30px;
-    margin:10px;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    background:linear-gradient(135deg,#22c55e,#16a34a);
-    color:white;
-    cursor:pointer;
-    font-weight:bold;
-    box-shadow:0 4px 15px rgba(0,0,0,0.4);
-    transition:0.3s;
+padding:14px 30px;
+margin:10px;
+border:none;
+border-radius:8px;
+font-size:16px;
+background:linear-gradient(135deg,#22c55e,#16a34a);
+color:white;
+cursor:pointer;
+font-weight:bold;
+box-shadow:0 4px 15px rgba(0,0,0,0.4);
+transition:0.3s;
 }
 
 button:hover{
-    transform:translateY(-3px);
+transform:translateY(-3px);
 }
 
-/* Footer */
-
 .footer{
-    margin-top:80px;
-    text-align:center;
-    font-size:14px;
-    color:#94a3b8;
+margin-top:80px;
+text-align:center;
+font-size:14px;
+color:#94a3b8;
 }
 
 </style>
@@ -130,25 +120,29 @@ button:hover{
 ⚙ Workflow Automation Engine
 </div>
 
+<div class="subtitle">
+Engineering Automation Platform
+</div>
+
 <div class="container">
 
 <h2>Visual Workflow Example</h2>
 
 <div class="workflow">
 
-<div class="step">Start</div>
+<div id="step1" class="step">Start</div>
 
 <div class="arrow">➜</div>
 
-<div class="step">Manager Approval</div>
+<div id="step2" class="step">Manager Approval</div>
 
 <div class="arrow">➜</div>
 
-<div class="step">Finance Approval</div>
+<div id="step3" class="step">Finance Approval</div>
 
 <div class="arrow">➜</div>
 
-<div class="step">Completed</div>
+<div id="step4" class="step">Completed</div>
 
 </div>
 
@@ -156,13 +150,13 @@ button:hover{
 
 <h3>Control Panel</h3>
 
+<button onclick="runWorkflow()">Run Demo Workflow</button>
+
 <button onclick="createWorkflow()">Create Workflow</button>
 
 <button onclick="viewWorkflows()">View Workflows</button>
 
 <button onclick="openDocs()">API Docs</button>
-
-<button onclick="status()">System Status</button>
 
 </div>
 
@@ -174,24 +168,47 @@ Halleyx Hackathon Project | FastAPI Workflow Engine
 
 <script>
 
+function runWorkflow(){
+
+let steps=["step1","step2","step3","step4"]
+
+steps.forEach(id=>{
+document.getElementById(id).classList.remove("active")
+})
+
+let i=0
+
+function activate(){
+
+if(i<steps.length){
+
+document.getElementById(steps[i]).classList.add("active")
+
+i++
+
+setTimeout(activate,1000)
+
+}
+
+}
+
+activate()
+
+}
+
 function createWorkflow(){
-    window.location.href="/docs#/default/create_workflow_workflows_post"
+window.location.href="/docs#/default/create_workflow_workflows_post"
 }
 
 function viewWorkflows(){
-    window.location.href="/workflows"
+window.location.href="/workflows"
 }
 
 function openDocs(){
-    window.location.href="/docs"
-}
-
-function status(){
-    alert("Workflow Engine Running Successfully")
+window.location.href="/docs"
 }
 
 </script>
 
 </body>
-
 </html>
