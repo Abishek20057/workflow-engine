@@ -2,51 +2,39 @@
 <html>
 
 <head>
-<title>Workflow Engine Dashboard</title>
+
+<title>Workflow Engine</title>
 
 <style>
 
 body{
 font-family: Arial;
-margin:0;
-background:#f4f6f9;
-}
-
-header{
-background:#2c3e50;
+background: linear-gradient(135deg,#1e3c72,#2a5298);
 color:white;
-padding:20px;
 text-align:center;
+margin-top:120px;
 }
 
 .container{
-padding:30px;
+background:rgba(255,255,255,0.1);
+padding:40px;
+border-radius:10px;
+display:inline-block;
 }
 
 button{
-padding:10px 20px;
-background:#3498db;
+padding:15px 30px;
+font-size:18px;
 border:none;
+background:#00c9a7;
 color:white;
-border-radius:5px;
+border-radius:6px;
 cursor:pointer;
+margin-top:20px;
 }
 
 button:hover{
-background:#2980b9;
-}
-
-.card{
-background:white;
-padding:20px;
-margin-top:20px;
-border-radius:8px;
-box-shadow:0px 2px 10px rgba(0,0,0,0.1);
-}
-
-.workflow{
-padding:10px;
-border-bottom:1px solid #ddd;
+background:#00a58b;
 }
 
 </style>
@@ -55,83 +43,29 @@ border-bottom:1px solid #ddd;
 
 <body>
 
-<header>
-<h1>Workflow Automation Dashboard</h1>
-<p>Halleyx Hackathon Project</p>
-</header>
-
 <div class="container">
 
-<button onclick="createWorkflow()">Create Sample Workflow</button>
+<h1>Workflow Automation Engine</h1>
 
-<div class="card">
+<p>Halleyx Hackathon Project</p>
 
-<h3>Existing Workflows</h3>
-
-<div id="workflowList">
-Loading workflows...
-</div>
-
-</div>
+<button onclick="openDocs()">
+Open Workflow API Docs
+</button>
 
 </div>
 
 
 <script>
 
-async function loadWorkflows(){
+function openDocs(){
 
-const response = await fetch("/workflows")
-const data = await response.json()
-
-let html = ""
-
-data.forEach(w => {
-
-html += `
-<div class="workflow">
-<b>${w.name}</b><br>
-ID: ${w.id}
-</div>
-`
-
-})
-
-document.getElementById("workflowList").innerHTML = html
+window.location.href="/docs"
 
 }
-
-async function createWorkflow(){
-
-const response = await fetch("/workflows",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body: JSON.stringify({
-name:"Expense Approval",
-version:1,
-is_active:true,
-input_schema:{
-amount:"number",
-country:"string",
-priority:"string"
-},
-start_step_id:null
-})
-})
-
-const data = await response.json()
-
-alert("Workflow Created!")
-
-loadWorkflows()
-
-}
-
-loadWorkflows()
 
 </script>
 
 </body>
+
 </html>
