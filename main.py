@@ -3,7 +3,11 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import re
 
-app = FastAPI()
+app = FastAPI(
+title="Workflow Automation Engine API",
+description="Expense Approval Workflow System",
+version="1.0"
+)
 
 
 class Expense(BaseModel):
@@ -23,11 +27,10 @@ def submit_expense(expense: Expense):
     name = expense.name
     amount = expense.amount
 
-    # Validate employee name
+    # validate employee name
     if not re.match("^[A-Za-z ]+$", name):
         return {"status": "❌ Employee name must contain only alphabets"}
 
-    # Approval Logic
     if amount < 500:
         status = "❌ Request Rejected (Minimum amount is 500)"
 
@@ -41,4 +44,16 @@ def submit_expense(expense: Expense):
         "name": name,
         "amount": amount,
         "status": status
+    }
+
+
+@app.get("/workflows")
+def workflows():
+    return {
+        "workflow": [
+            "Start",
+            "Manager Approval",
+            "Finance Approval",
+            "Completed"
+        ]
     }
