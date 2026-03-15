@@ -54,8 +54,6 @@ opacity:0.4;
 transition:0.4s;
 }
 
-/* ACTIVE STEP */
-
 .active{
 opacity:1;
 transform:scale(1.15);
@@ -102,14 +100,6 @@ padding:10px;
 margin:8px;
 border-radius:5px;
 border:none;
-}
-
-/* RESULT */
-
-#result{
-margin-top:15px;
-font-size:18px;
-font-weight:bold;
 }
 
 /* FOOTER */
@@ -210,8 +200,6 @@ font-size:14px;
 
 <button onclick="submitExpense()">Submit Request</button>
 
-<div id="result"></div>
-
 </div>
 
 
@@ -224,11 +212,6 @@ font-size:14px;
 
 <script>
 
-let activeFlows = 0;
-
-
-/* SUBMIT EXPENSE */
-
 async function submitExpense(){
 
 let name=document.getElementById("name").value;
@@ -236,19 +219,32 @@ let amount=parseInt(document.getElementById("amount").value);
 
 let namePattern=/^[A-Za-z ]+$/;
 
-/* NAME VALIDATION */
-
 if(!namePattern.test(name)){
 
-document.getElementById("result").innerHTML=
-"❌ Employee name must contain only alphabets";
+alert("Employee name must contain only alphabets");
 
 return;
 
 }
 
+/* workflow animation */
 
-/* CALL API */
+document.getElementById("step1").classList.add("active");
+
+setTimeout(()=>{
+document.getElementById("step2").classList.add("active");
+},800);
+
+setTimeout(()=>{
+document.getElementById("step3").classList.add("active");
+},1600);
+
+setTimeout(()=>{
+document.getElementById("step4").classList.add("active");
+},2400);
+
+
+/* API call */
 
 let response=await fetch("/submit-expense",{
 
@@ -267,40 +263,14 @@ amount:amount
 
 let data=await response.json();
 
+/* update active workflow */
 
-document.getElementById("result").innerHTML=data.status;
+document.getElementById("activeCount").innerHTML=data.active;
 
-
-/* INCREASE ACTIVE FLOW */
-
-activeFlows++;
-
-document.getElementById("activeCount").innerHTML=activeFlows;
-
-
-/* RESET STEPS */
-
-document.querySelectorAll(".step").forEach(step=>{
-step.classList.remove("active");
-});
-
-
-/* STEP ANIMATION */
+/* redirect to result page */
 
 setTimeout(()=>{
-document.getElementById("step1").classList.add("active");
-},200);
-
-setTimeout(()=>{
-document.getElementById("step2").classList.add("active");
-},1000);
-
-setTimeout(()=>{
-document.getElementById("step3").classList.add("active");
-},1800);
-
-setTimeout(()=>{
-document.getElementById("step4").classList.add("active");
+window.location.href="/result/"+data.status;
 },2600);
 
 }
@@ -312,7 +282,6 @@ document.getElementById("step4").classList.add("active");
 function demoWorkflow(){
 
 document.getElementById("name").value="John";
-
 document.getElementById("amount").value="2000";
 
 submitExpense();
