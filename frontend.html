@@ -39,7 +39,7 @@ margin-top:40px;
 /* workflow image */
 
 .workflow-img{
-width:350px;
+width:420px;
 border-radius:12px;
 margin:20px;
 box-shadow:0 10px 30px rgba(0,0,0,0.5);
@@ -59,6 +59,21 @@ padding:12px 25px;
 border-radius:8px;
 margin:10px;
 font-weight:bold;
+animation: flow 2s infinite alternate;
+}
+
+@keyframes flow{
+
+0%{
+transform:scale(1);
+box-shadow:0 0 0px #00c6ff;
+}
+
+100%{
+transform:scale(1.1);
+box-shadow:0 0 20px #00c6ff;
+}
+
 }
 
 /* cards */
@@ -73,7 +88,7 @@ background:rgba(255,255,255,0.1);
 padding:30px;
 margin:15px;
 border-radius:10px;
-width:150px;
+width:160px;
 }
 
 /* buttons */
@@ -146,8 +161,7 @@ font-size:14px;
 <p style="color:lightgreen;">● Engine Running</p>
 
 
-<img class="workflow-img"
-src="https://img.freepik.com/free-photo/automation-business-concept-with-gears_53876-124641.jpg">
+<img src="workflow.jpg" class="workflow-img">
 
 
 <h2>Visual Workflow Example</h2>
@@ -155,14 +169,21 @@ src="https://img.freepik.com/free-photo/automation-business-concept-with-gears_5
 <div class="steps">
 
 <div class="step">Start</div>
+
 →
+
 <div class="step">Manager Approval</div>
+
 →
+
 <div class="step">Finance Approval</div>
+
 →
+
 <div class="step">Completed</div>
 
 </div>
+
 
 
 <div class="cards">
@@ -173,7 +194,7 @@ src="https://img.freepik.com/free-photo/automation-business-concept-with-gears_5
 </div>
 
 <div class="card">
-<h2>1</h2>
+<h2 id="activeCount">0</h2>
 <p>Active Workflow</p>
 </div>
 
@@ -183,6 +204,7 @@ src="https://img.freepik.com/free-photo/automation-business-concept-with-gears_5
 </div>
 
 </div>
+
 
 
 <h2>Control Panel</h2>
@@ -258,6 +280,10 @@ amount:amount
 let data=await response.json();
 
 document.getElementById("result").innerHTML=data.status;
+
+/* increase active workflow */
+
+document.getElementById("activeCount").innerHTML=data.active;
 
 }
 
