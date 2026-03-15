@@ -9,6 +9,8 @@ description="Expense Approval Workflow System",
 version="1.0"
 )
 
+active_workflows = 0
+
 
 class Expense(BaseModel):
     name: str
@@ -24,12 +26,15 @@ def home():
 @app.post("/submit-expense")
 def submit_expense(expense: Expense):
 
+    global active_workflows
+
     name = expense.name
     amount = expense.amount
 
-    # validate employee name
     if not re.match("^[A-Za-z ]+$", name):
         return {"status": "❌ Employee name must contain only alphabets"}
+
+    active_workflows += 1
 
     if amount < 500:
         status = "❌ Request Rejected (Minimum amount is 500)"
@@ -43,8 +48,14 @@ def submit_expense(expense: Expense):
     return {
         "name": name,
         "amount": amount,
-        "status": status
+        "status": status,
+        "active": active_workflows
     }
+
+
+@app.get("/active")
+def active():
+    return {"active": active_workflows}
 
 
 @app.get("/workflows")
