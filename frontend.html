@@ -2,47 +2,51 @@
 <html>
 
 <head>
+
 <title>Workflow Automation Engine</title>
 
 <style>
 
 body{
 font-family:"Times New Roman", serif;
-background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+background: linear-gradient(135deg,#141E30,#243B55);
 color:white;
 text-align:center;
 margin:0;
-padding:0;
 }
 
-/* Navbar */
+/* navbar */
 
 .navbar{
 display:flex;
 justify-content:space-between;
 padding:15px 40px;
+background:#0f2027;
 }
 
 .navbar a{
 color:white;
 text-decoration:none;
 margin-left:20px;
+font-size:16px;
 }
 
-/* Container */
+/* container */
 
 .container{
 margin-top:40px;
 }
 
-/* Workflow image */
+/* workflow image */
 
 .workflow-img{
-width:140px;
+width:420px;
+border-radius:12px;
 margin:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.5);
 }
 
-/* Steps */
+/* steps */
 
 .steps{
 margin-top:20px;
@@ -55,9 +59,10 @@ color:black;
 padding:12px 25px;
 border-radius:8px;
 margin:10px;
+font-weight:bold;
 }
 
-/* Cards */
+/* cards */
 
 .cards{
 margin-top:30px;
@@ -72,7 +77,7 @@ border-radius:10px;
 width:150px;
 }
 
-/* Buttons */
+/* buttons */
 
 button{
 padding:12px 25px;
@@ -89,7 +94,7 @@ button:hover{
 background:#27ae60;
 }
 
-/* Input */
+/* input */
 
 input{
 width:220px;
@@ -99,7 +104,7 @@ border-radius:5px;
 border:none;
 }
 
-/* Result */
+/* result */
 
 #result{
 margin-top:15px;
@@ -107,7 +112,16 @@ font-size:18px;
 font-weight:bold;
 }
 
+/* footer */
+
+.footer{
+margin-top:40px;
+opacity:0.8;
+font-size:14px;
+}
+
 </style>
+
 </head>
 
 
@@ -120,9 +134,11 @@ font-weight:bold;
 <div>
 <a href="/">Home</a>
 <a href="/docs">API Docs</a>
+<a href="/workflows">Workflows</a>
 </div>
 
 </div>
+
 
 
 <div class="container">
@@ -134,8 +150,7 @@ font-weight:bold;
 <p style="color:lightgreen;">● Engine Running</p>
 
 
-<img class="workflow-img"
-src="https://cdn-icons-png.flaticon.com/512/2620/2620995.png">
+<img src="workflow.jpg" class="workflow-img">
 
 
 <h2>Visual Workflow Example</h2>
@@ -143,14 +158,21 @@ src="https://cdn-icons-png.flaticon.com/512/2620/2620995.png">
 <div class="steps">
 
 <div class="step">Start</div>
+
 →
+
 <div class="step">Manager Approval</div>
+
 →
+
 <div class="step">Finance Approval</div>
+
 →
+
 <div class="step">Completed</div>
 
 </div>
+
 
 
 <div class="cards">
@@ -173,11 +195,26 @@ src="https://cdn-icons-png.flaticon.com/512/2620/2620995.png">
 </div>
 
 
+
+<h2>Control Panel</h2>
+
+<button onclick="demoWorkflow()">Run Demo Workflow</button>
+
+<button onclick="window.location='/docs'">API Docs</button>
+
+<button onclick="window.location='/workflows'">View Workflows</button>
+
+
+
 <h2>Submit Expense Request</h2>
 
-<input id="name" placeholder="Employee Name"><br>
+<input id="name" placeholder="Employee Name">
 
-<input id="amount" type="number" placeholder="Amount"><br>
+<br>
+
+<input id="amount" type="number" placeholder="Amount">
+
+<br>
 
 <button onclick="submitExpense()">Submit Request</button>
 
@@ -186,12 +223,35 @@ src="https://cdn-icons-png.flaticon.com/512/2620/2620995.png">
 </div>
 
 
+
+<div class="footer">
+
+© 2026 Halleyx Hackathon Project | FastAPI Workflow Engine
+
+</div>
+
+
+
 <script>
 
 async function submitExpense(){
 
 let name=document.getElementById("name").value;
+
 let amount=parseInt(document.getElementById("amount").value);
+
+/* frontend name validation */
+
+let namePattern=/^[A-Za-z ]+$/;
+
+if(!namePattern.test(name)){
+
+document.getElementById("result").innerHTML=
+"❌ Employee name must contain only alphabets";
+
+return;
+
+}
 
 let response=await fetch("/submit-expense",{
 
@@ -214,7 +274,23 @@ document.getElementById("result").innerHTML=data.status;
 
 }
 
+
+
+/* demo workflow */
+
+function demoWorkflow(){
+
+document.getElementById("name").value="John";
+
+document.getElementById("amount").value="2000";
+
+submitExpense();
+
+}
+
 </script>
 
+
 </body>
+
 </html>
