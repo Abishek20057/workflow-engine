@@ -8,7 +8,7 @@
 <style>
 
 body{
-font-family:"Times New Roman", serif;
+font-family:"Times New Roman";
 background:linear-gradient(135deg,#1e3c5a,#0f2027);
 color:white;
 text-align:center;
@@ -36,7 +36,7 @@ margin-left:20px;
 margin-top:40px;
 }
 
-/* WORKFLOW STEPS */
+/* WORKFLOW */
 
 .steps{
 margin-top:30px;
@@ -75,7 +75,7 @@ border-radius:10px;
 width:170px;
 }
 
-/* BUTTONS */
+/* BUTTON */
 
 button{
 padding:12px 25px;
@@ -222,7 +222,6 @@ let namePattern=/^[A-Za-z ]+$/;
 if(!namePattern.test(name)){
 
 alert("Employee name must contain only alphabets");
-
 return;
 
 }
@@ -244,7 +243,7 @@ document.getElementById("step4").classList.add("active");
 },2400);
 
 
-/* API call */
+/* API */
 
 let response=await fetch("/submit-expense",{
 
@@ -267,7 +266,7 @@ let data=await response.json();
 
 document.getElementById("activeCount").innerHTML=data.active;
 
-/* redirect to result page */
+/* redirect result page */
 
 setTimeout(()=>{
 window.location.href="/result/"+data.status;
@@ -276,8 +275,6 @@ window.location.href="/result/"+data.status;
 }
 
 
-
-/* DEMO WORKFLOW */
 
 function demoWorkflow(){
 

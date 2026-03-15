@@ -4,19 +4,23 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+# store workflow history
 workflow_data = []
+
 
 class Expense(BaseModel):
     name: str
     amount: int
 
 
+# Home page
 @app.get("/", response_class=HTMLResponse)
 def home():
     with open("frontend.html") as f:
         return f.read()
 
 
+# Submit expense
 @app.post("/submit-expense")
 def submit_expense(expense: Expense):
 
@@ -34,11 +38,14 @@ def submit_expense(expense: Expense):
     else:
         status = "Finance Approval Required 💰"
 
-    workflow_data.append({
+    # save workflow entry
+    workflow_entry = {
         "name": expense.name,
         "amount": amount,
         "status": status
-    })
+    }
+
+    workflow_data.append(workflow_entry)
 
     return {
         "status": status,
@@ -46,11 +53,7 @@ def submit_expense(expense: Expense):
     }
 
 
-@app.get("/workflows")
-def workflows():
-    return workflow_data
-
-
+# Animated result page
 @app.get("/result/{status}", response_class=HTMLResponse)
 def result_page(status: str):
 
@@ -71,7 +74,7 @@ def result_page(status: str):
         margin-top:150px;
     }}
 
-    .box{{
+    .result{{
         font-size:60px;
         animation:pop 1s infinite alternate;
     }}
@@ -92,13 +95,101 @@ def result_page(status: str):
 
     <body>
 
-    <div class="box">
+    <div class="result">
     {status}
     </div>
 
     <br><br>
 
-    <a href="/">⬅ Back to Workflow Dashboard</a>
+    <a href="/">⬅ Back to Dashboard</a>
+
+    </body>
+
+    </html>
+    """
+
+
+# Workflow history table
+@app.get("/workflows", response_class=HTMLResponse)
+def workflows():
+
+    rows = ""
+
+    for w in workflow_data:
+        rows += f"""
+        <tr>
+            <td>{w['name']}</td>
+            <td>{w['amount']}</td>
+            <td>{w['status']}</td>
+        </tr>
+        """
+
+    return f"""
+    <html>
+
+    <head>
+
+    <title>Workflow History</title>
+
+    <style>
+
+    body{{
+        font-family:"Times New Roman";
+        background:#0f2027;
+        color:white;
+        text-align:center;
+        padding:40px;
+    }}
+
+    table{{
+        margin:auto;
+        border-collapse:collapse;
+        width:70%;
+        background:#1e3c5a;
+    }}
+
+    th,td{{
+        padding:15px;
+        border:1px solid #00c6ff;
+    }}
+
+    th{{
+        background:#00c6ff;
+        color:black;
+    }}
+
+    tr:hover{{
+        background:#2c5364;
+    }}
+
+    a{{
+        color:#00c6ff;
+        font-size:18px;
+    }}
+
+    </style>
+
+    </head>
+
+    <body>
+
+    <h1>Workflow History</h1>
+
+    <table>
+
+    <tr>
+        <th>Employee Name</th>
+        <th>Amount</th>
+        <th>Status</th>
+    </tr>
+
+    {rows}
+
+    </table>
+
+    <br><br>
+
+    <a href="/">⬅ Back to Dashboard</a>
 
     </body>
 
