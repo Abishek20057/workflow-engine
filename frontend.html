@@ -9,19 +9,19 @@
 
 body{
 font-family:"Times New Roman", serif;
-background: linear-gradient(135deg,#141E30,#243B55);
+background:linear-gradient(135deg,#1e3c5a,#0f2027);
 color:white;
 text-align:center;
 margin:0;
 }
 
-/* navbar */
+/* NAVBAR */
 
 .navbar{
 display:flex;
 justify-content:space-between;
 padding:15px 40px;
-background:#0f2027;
+background:#081c24;
 }
 
 .navbar a{
@@ -30,25 +30,16 @@ text-decoration:none;
 margin-left:20px;
 }
 
-/* container */
+/* CONTAINER */
 
 .container{
 margin-top:40px;
 }
 
-/* workflow image */
-
-.workflow-img{
-width:420px;
-border-radius:12px;
-margin:20px;
-box-shadow:0 10px 30px rgba(0,0,0,0.5);
-}
-
-/* workflow steps */
+/* WORKFLOW STEPS */
 
 .steps{
-margin-top:20px;
+margin-top:30px;
 }
 
 .step{
@@ -59,33 +50,22 @@ padding:12px 25px;
 border-radius:8px;
 margin:10px;
 font-weight:bold;
+opacity:0.4;
 transition:0.4s;
 }
 
-/* animation class */
+/* ACTIVE STEP */
 
-.animate{
-animation: flow 0.8s infinite alternate;
+.active{
+opacity:1;
+transform:scale(1.15);
+box-shadow:0 0 15px #00c6ff;
 }
 
-@keyframes flow{
-
-0%{
-transform:scale(1);
-box-shadow:0 0 0px #00c6ff;
-}
-
-100%{
-transform:scale(1.1);
-box-shadow:0 0 20px #00c6ff;
-}
-
-}
-
-/* cards */
+/* CARDS */
 
 .cards{
-margin-top:30px;
+margin-top:40px;
 }
 
 .card{
@@ -94,10 +74,10 @@ background:rgba(255,255,255,0.1);
 padding:30px;
 margin:15px;
 border-radius:10px;
-width:160px;
+width:170px;
 }
 
-/* buttons */
+/* BUTTONS */
 
 button{
 padding:12px 25px;
@@ -107,24 +87,24 @@ background:#2ecc71;
 color:white;
 font-size:16px;
 cursor:pointer;
-margin-top:10px;
+margin:10px;
 }
 
 button:hover{
 background:#27ae60;
 }
 
-/* inputs */
+/* INPUT */
 
 input{
-width:220px;
+width:230px;
 padding:10px;
 margin:8px;
 border-radius:5px;
 border:none;
 }
 
-/* result */
+/* RESULT */
 
 #result{
 margin-top:15px;
@@ -132,8 +112,10 @@ font-size:18px;
 font-weight:bold;
 }
 
+/* FOOTER */
+
 .footer{
-margin-top:40px;
+margin-top:50px;
 opacity:0.8;
 font-size:14px;
 }
@@ -158,6 +140,7 @@ font-size:14px;
 </div>
 
 
+
 <div class="container">
 
 <h1>Workflow Automation Engine</h1>
@@ -167,11 +150,8 @@ font-size:14px;
 <p style="color:lightgreen;">● Engine Running</p>
 
 
-<img class="workflow-img"
-src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg">
 
-
-<h2>Visual Workflow Example</h2>
+<h2>Visual Workflow</h2>
 
 <div class="steps">
 
@@ -237,22 +217,26 @@ src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg">
 
 
 <div class="footer">
-
 © 2026 Halleyx Hackathon Project | FastAPI Workflow Engine
-
 </div>
 
 
 
 <script>
 
+let activeFlows = 0;
+
+
+/* SUBMIT EXPENSE */
+
 async function submitExpense(){
 
 let name=document.getElementById("name").value;
-
 let amount=parseInt(document.getElementById("amount").value);
 
 let namePattern=/^[A-Za-z ]+$/;
+
+/* NAME VALIDATION */
 
 if(!namePattern.test(name)){
 
@@ -262,6 +246,9 @@ document.getElementById("result").innerHTML=
 return;
 
 }
+
+
+/* CALL API */
 
 let response=await fetch("/submit-expense",{
 
@@ -280,38 +267,47 @@ amount:amount
 
 let data=await response.json();
 
+
 document.getElementById("result").innerHTML=data.status;
 
-/* increase active workflow */
 
-document.getElementById("activeCount").innerHTML=data.active;
+/* INCREASE ACTIVE FLOW */
 
-/* workflow animation */
+activeFlows++;
 
-document.getElementById("step1").classList.add("animate");
+document.getElementById("activeCount").innerHTML=activeFlows;
+
+
+/* RESET STEPS */
+
+document.querySelectorAll(".step").forEach(step=>{
+step.classList.remove("active");
+});
+
+
+/* STEP ANIMATION */
 
 setTimeout(()=>{
+document.getElementById("step1").classList.add("active");
+},200);
 
-document.getElementById("step2").classList.add("animate");
-
+setTimeout(()=>{
+document.getElementById("step2").classList.add("active");
 },1000);
 
 setTimeout(()=>{
-
-document.getElementById("step3").classList.add("animate");
-
-},2000);
+document.getElementById("step3").classList.add("active");
+},1800);
 
 setTimeout(()=>{
-
-document.getElementById("step4").classList.add("animate");
-
-},3000);
+document.getElementById("step4").classList.add("active");
+},2600);
 
 }
 
 
-/* demo workflow */
+
+/* DEMO WORKFLOW */
 
 function demoWorkflow(){
 
