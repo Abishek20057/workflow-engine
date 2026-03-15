@@ -9,11 +9,10 @@
 
 body{
 margin:0;
-font-family:Arial;
+font-family:"Times New Roman", Times, serif;
 color:white;
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-background-size:cover;
 text-align:center;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
 }
 
 .header{
@@ -35,12 +34,6 @@ text-decoration:none;
 
 .main{
 padding:60px;
-}
-
-.status{
-margin-top:10px;
-font-size:14px;
-color:#9be7a0;
 }
 
 .status-dot{
@@ -74,12 +67,6 @@ padding:15px 25px;
 border-radius:8px;
 color:black;
 font-weight:bold;
-transition:0.3s;
-}
-
-.step:hover{
-transform:scale(1.1);
-box-shadow:0 0 20px #00d4ff;
 }
 
 .arrow{
@@ -100,14 +87,6 @@ border-radius:10px;
 width:160px;
 }
 
-.card h1{
-margin:0;
-}
-
-.panel{
-margin-top:60px;
-}
-
 button{
 padding:14px 26px;
 margin:10px;
@@ -117,7 +96,6 @@ font-size:16px;
 cursor:pointer;
 background:#22c55e;
 color:white;
-transition:0.3s;
 }
 
 button:hover{
@@ -137,9 +115,22 @@ border-radius:5px;
 border:none;
 }
 
+.result{
+margin-top:20px;
+font-size:20px;
+font-weight:bold;
+}
+
+.image-box{
+margin-top:40px;
+}
+
+.image-box img{
+width:250px;
+}
+
 .footer{
 margin-top:60px;
-font-size:14px;
 opacity:0.7;
 }
 
@@ -168,12 +159,19 @@ opacity:0.7;
 
 <p>Engineering Automation Platform</p>
 
-<div class="status">
+<div>
 <span class="status-dot"></span>Engine Running
 </div>
 
 
-<h2 style="margin-top:50px;">Visual Workflow Example</h2>
+<div class="image-box">
+
+<img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png">
+
+</div>
+
+
+<h2>Visual Workflow Example</h2>
 
 <div class="workflow">
 
@@ -214,20 +212,7 @@ opacity:0.7;
 </div>
 
 
-<div class="panel">
-
-<h2>Control Panel</h2>
-
-<button onclick="runDemo()">Run Demo Workflow</button>
-
-<button onclick="location.href='/docs'">API Docs</button>
-
-<button onclick="location.href='/workflows'">View Workflows</button>
-
-</div>
-
-
-<h2 style="margin-top:60px;">Submit Expense Request</h2>
+<h2>Submit Expense Request</h2>
 
 <div class="form-box">
 
@@ -238,6 +223,9 @@ opacity:0.7;
 <button onclick="submitExpense()">Submit Request</button>
 
 </div>
+
+<div class="result" id="result"></div>
+
 
 <div class="footer">
 
@@ -250,10 +238,6 @@ FastAPI Workflow Engine
 
 
 <script>
-
-function runDemo(){
-alert("Demo Workflow Started\nStart → Manager → Finance → Completed")
-}
 
 async function submitExpense(){
 
@@ -273,7 +257,10 @@ amount:Number(amount)
 
 const data=await res.json()
 
-alert("Status: "+data.status)
+let emoji="🎊"
+
+document.getElementById("result").innerHTML=
+emoji+" "+data.status
 
 }
 
