@@ -1,16 +1,11 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
-import re
 
-app = FastAPI(
-title="Workflow Automation Engine API",
-description="Expense Approval Workflow System",
-version="1.0"
-)
+app = FastAPI()
 
-active_workflows = 0
-
+# store workflows
+workflow_data = []
 
 class Expense(BaseModel):
     name: str
@@ -19,52 +14,45 @@ class Expense(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 def home():
-    with open("frontend.html", "r", encoding="utf-8") as f:
+    with open("frontend.html") as f:
         return f.read()
 
 
 @app.post("/submit-expense")
 def submit_expense(expense: Expense):
 
-    global active_workflows
-
-    name = expense.name
     amount = expense.amount
 
-    if not re.match("^[A-Za-z ]+$", name):
-        return {"status": "❌ Employee name must contain only alphabets"}
-
-    active_workflows += 1
-
     if amount < 500:
-        status = "❌ Request Rejected (Minimum amount is 500)"
+        status = "❌ Rejected"
 
-    elif amount < 5000:
+    elif amount < 1000:
+        status = "🎉 Auto Approved"
+
+    elif amount < 10000:
         status = "👨‍💼 Manager Approval Required"
 
     else:
         status = "💰 Finance Approval Required"
 
-    return {
-        "name": name,
+
+    # store workflow entry
+    workflow_entry = {
+        "name": expense.name,
         "amount": amount,
-        "status": status,
-        "active": active_workflows
+        "status": status
     }
 
+    workflow_data.append(workflow_entry)
 
-@app.get("/active")
-def active():
-    return {"active": active_workflows}
+    return {
+        "name": expense.name,
+        "amount": amount,
+        "status": status,
+        "active": len(workflow_data)
+    }
 
 
 @app.get("/workflows")
-def workflows():
-    return {
-        "workflow": [
-            "Start",
-            "Manager Approval",
-            "Finance Approval",
-            "Completed"
-        ]
-    }
+def get_workflows():
+    return workflow_data
