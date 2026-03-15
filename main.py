@@ -12,7 +12,6 @@ class Expense(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 def home():
-
     with open("frontend.html") as f:
         return f.read()
 
@@ -23,15 +22,12 @@ def submit_expense(expense: Expense):
     amount = expense.amount
 
     if amount < 1000:
-
         status = "Auto Approved 🎉"
 
     elif amount < 10000:
-
         status = "Manager Approval Required 👨‍💼"
 
     else:
-
         status = "Finance Approval Required 💰"
 
     return {
